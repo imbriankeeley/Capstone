@@ -33,13 +33,13 @@ const ACTIONS = {
 async function initializeClassifier() {
     try {
         isModelLoading = true;
-        // TODO: Implement actual model loading when model is available
-        console.log('Loading classification model...');
         
-        // Simulate model loading for stub purposes
+        // In a real application, we would load an actual model:
+        // model = await tf.loadLayersModel(MODEL_PATH);
+        
+        // For stub implementation, use mock model
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        // Mock model for stub implementation
         model = {
             predict: (tensor) => {
                 console.log('Model prediction called');
@@ -49,9 +49,11 @@ async function initializeClassifier() {
         
         isModelLoading = false;
         console.log('Classification model loaded successfully');
+        return true;
     } catch (error) {
         console.error('Error loading model:', error);
         isModelLoading = false;
+        throw error;
     }
 }
 
@@ -60,7 +62,6 @@ async function initializeClassifier() {
  * Returns randomly generated classification results
  */
 function mockPredict() {
-    // This is just a placeholder for the actual model prediction
     // Generate mock confidence scores that sum to 1
     const confidences = generateMockConfidences();
     
@@ -85,21 +86,23 @@ function generateMockConfidences() {
  * @returns {tf.Tensor} The preprocessed image tensor
  */
 function preprocessImage(imgElement) {
-    // TODO: Implement actual image preprocessing for the model
     console.log('Preprocessing image for classification');
     
-    // This will be replaced with actual TensorFlow.js code
-    // return tf.tidy(() => {
-    //     const tensor = tf.browser.fromPixels(imgElement)
-    //         .resizeNearestNeighbor([224, 224])
-    //         .toFloat()
-    //         .div(tf.scalar(255.0))
-    //         .expandDims();
-    //     return tensor;
-    // });
+    // In a real application, this would use TensorFlow.js:
+    /*
+    return tf.tidy(() => {
+        const tensor = tf.browser.fromPixels(imgElement)
+            .resizeNearestNeighbor([224, 224])
+            .toFloat()
+            .div(tf.scalar(255.0))
+            .expandDims();
+        return tensor;
+    });
+    */
     
+    // For stub implementation, return null
     console.log('Image preprocessing complete');
-    return null; // Placeholder
+    return null;
 }
 
 /**
@@ -114,13 +117,6 @@ async function classifyImage(imgElement) {
     
     try {
         console.log('Starting image classification');
-        
-        // TODO: Implement actual classification using TensorFlow.js
-        // const tensor = preprocessImage(imgElement);
-        // const predictions = await model.predict(tensor);
-        // const data = predictions.dataSync();
-        // tensor.dispose();
-        // predictions.dispose();
         
         // For stub purposes, use mock prediction data
         const data = generateMockConfidences();
@@ -160,10 +156,12 @@ function formatResults(predictionData) {
             category: category,
             confidence: predictionData[index] * 100 // Convert to percentage
         })),
-        recommendedAction: ACTIONS[ripeness]
+        recommendedAction: ACTIONS[ripeness],
+        timestamp: new Date()
     };
 }
 
-// Export functions for use in other modules
-// Note: In a real application with modules, we would use proper export statements
-// window.classifyImage = classifyImage;
+// Expose functions to window object for access from other scripts
+window.initializeClassifier = initializeClassifier;
+window.classifyImage = classifyImage;
+window.preprocessImage = preprocessImage;

@@ -1,0 +1,84 @@
+{
+  "fruits": [
+    {
+      "name": "apple",
+      "displayName": "Apple",
+      "ripenessIndicators": {
+        "unripe": "Firm texture, bright green or light red color",
+        "ripe": "Firm but slightly yielding texture, bright red or yellow color",
+        "overripe": "Softer texture, deeper color, slight bruising may appear",
+        "spoiled": "Very soft texture, browning, visible mold or rot"
+      },
+      "storageRecommendations": {
+        "unripe": "Room temperature away from direct sunlight",
+        "ripe": "Refrigerate for up to 1-2 weeks",
+        "overripe": "Use immediately or refrigerate for 1-2 days",
+        "spoiled": "Discard"
+      }
+    },
+    {
+      "name": "banana",
+      "displayName": "Banana",
+      "ripenessIndicators": {
+        "unripe": "Green color, firm texture",
+        "ripe": "Yellow color with small brown spots, slightly soft",
+        "overripe": "Yellow with many brown spots, soft texture",
+        "spoiled": "Mostly brown or black, mushy texture"
+      },
+      "storageRecommendations": {
+        "unripe": "Room temperature away from other fruit",
+        "ripe": "Room temperature, will last 1-2 days",
+        "overripe": "Refrigerate or freeze for baking",
+        "spoiled": "Discard or use in baking if no mold present"
+      }
+    },
+    {
+      "name": "orange",
+      "displayName": "Orange",
+      "ripenessIndicators": {
+        "unripe": "Light orange or greenish tint, firm texture",
+        "ripe": "Bright orange color, slightly soft when pressed",
+        "overripe": "Dark orange color, very soft, slightly wrinkled skin",
+        "spoiled": "Moldy spots, extremely soft, strong fermented smell"
+      },
+      "storageRecommendations": {
+        "unripe": "Room temperature for 1-2 days",
+        "ripe": "Refrigerate for up to 2 weeks",
+        "overripe": "Use immediately or refrigerate for 1-2 days",
+        "spoiled": "Discard"
+      }
+    },
+    {
+      "name": "strawberry",
+      "displayName": "Strawberry",
+      "ripenessIndicators": {
+        "unripe": "White or light pink color, firm texture",
+        "ripe": "Bright red color, slight give when pressed",
+        "overripe": "Deep red color, very soft, slight juice leakage",
+        "spoiled": "Dark red/brown color, mushy texture, mold present"
+      },
+      "storageRecommendations": {
+        "unripe": "Room temperature for 1 day",
+        "ripe": "Refrigerate for up to 3-5 days",
+        "overripe": "Use immediately or freeze for smoothies",
+        "spoiled": "Discard"
+      }
+    },
+    {
+      "name": "mango",
+      "displayName": "Mango",
+      "ripenessIndicators": {
+        "unripe": "Hard texture, bright green color",
+        "ripe": "Slightly soft when pressed, yellow or red color",
+        "overripe": "Very soft, wrinkled skin, strong aroma",
+        "spoiled": "Extremely soft, dark spots, fermented smell"
+      },
+      "storageRecommendations": {
+        "unripe": "Room temperature for 3-5 days",
+        "ripe": "Refrigerate for up to 5 days",
+        "overripe": "Use immediately or freeze",
+        "spoiled": "Discard"
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 
 /**
  * Classifier module for fruit ripeness detection
- * Uses TensorFlow.js to load and run the pre-trained model on the Fruits-360 dataset
+ * Uses TensorFlow.js to load and run the pre-trained model
  */
 
 // Model variables
@@ -11,6 +11,53 @@ let model = null;
 let isModelLoading = false;
 let fruitMetadata = null;
 const MODEL_PATH = 'model/model.json';
+
+// Class indices from the trained model
+// This should match the class indices from your training
+const CLASS_INDICES = {
+    // These will depend on your actual training results
+    // Format is 'class_name': index
+    'fresh_apple': 0, 'fresh_banana': 1, 'fresh_cherry': 2, 'fresh_grape': 3,
+    'fresh_kiwi': 4, 'fresh_mango': 5, 'fresh_orange': 6, 'fresh_peach': 7,
+    'fresh_pear': 8, 'fresh_plum': 9, 'fresh_strawberry': 10, 'fresh_watermelon': 11,
+    'rotten_apple': 12, 'rotten_banana': 13, 'rotten_cherry': 14, 'rotten_grape': 15,
+    'rotten_kiwi': 16, 'rotten_mango': 17, 'rotten_orange': 18, 'rotten_peach': 19,
+    'rotten_pear': 20, 'rotten_plum': 21, 'rotten_strawberry': 22, 'rotten_watermelon': 23
+};
+
+// Invert the class indices for easier lookup
+const INDICES_TO_CLASS = {};
+Object.keys(CLASS_INDICES).forEach(key => {
+    INDICES_TO_CLASS[CLASS_INDICES[key]] = key;
+});
+
+// Ripeness mapping from fresh/rotten to our four categories
+const RIPENESS_MAPPING = {
+    'fresh_apple': 'ripe',
+    'fresh_banana': 'ripe',
+    'fresh_cherry': 'ripe',
+    'fresh_grape': 'ripe',
+    'fresh_kiwi': 'ripe',
+    'fresh_mango': 'ripe',
+    'fresh_orange': 'ripe',
+    'fresh_peach': 'ripe',
+    'fresh_pear': 'ripe',
+    'fresh_plum': 'ripe',
+    'fresh_strawberry': 'ripe',
+    'fresh_watermelon': 'ripe',
+    'rotten_apple': 'spoiled',
+    'rotten_banana': 'spoiled',
+    'rotten_cherry': 'spoiled',
+    'rotten_grape': 'spoiled',
+    'rotten_kiwi': 'spoiled',
+    'rotten_mango': 'spoiled',
+    'rotten_orange': 'spoiled',
+    'rotten_peach': 'spoiled',
+    'rotten_pear': 'spoiled',
+    'rotten_plum': 'spoiled',
+    'rotten_strawberry': 'spoiled',
+    'rotten_watermelon': 'spoiled'
+};
 
 // Ripeness categories
 const RIPENESS_CATEGORIES = [
@@ -94,7 +141,21 @@ function createMockModel() {
  * @returns {Array} Array of confidence values
  */
 function generateMockConfidences() {
-    const values = Array(4).fill(0).map(() => Math.random());
+    // Create an array with zeros
+    const values = new Array(Object.keys(CLASS_INDICES).length).fill(0);
+    
+    // Set a high value for one of the classes to simulate prediction
+    const randomIndex = Math.floor(Math.random() * values.length);
+    values[randomIndex] = 0.8;
+    
+    // Add some noise to other values
+    for (let i = 0; i < values.length; i++) {
+        if (i !== randomIndex) {
+            values[i] = Math.random() * 0.2 / (values.length - 1);
+        }
+    }
+    
+    // Normalize to ensure sum is 1
     const sum = values.reduce((a, b) => a + b, 0);
     return values.map(v => v / sum);
 }
@@ -123,67 +184,139 @@ function preprocessImage(imgElement) {
 }
 
 /**
- * Attempt to identify the fruit type from an image
- * @param {HTMLImageElement} imgElement - The image element
- * @param {string} [fileName=''] - Optional file name which may contain fruit type
- * @returns {string} The detected fruit type or 'unknown'
+ * Extract fruit type from class name
+ * @param {string} className - The class name (e.g., 'fresh_apple')
+ * @returns {string} The fruit type (e.g., 'apple')
  */
-function identifyFruitType(imgElement, fileName = '') {
-    // First try to identify from the filename
-    const fruitTypeFromName = getFruitTypeFromFileName(fileName);
-    if (fruitTypeFromName !== 'unknown') {
-        return fruitTypeFromName;
+function extractFruitType(className) {
+    const parts = className.split('_');
+    if (parts.length > 1) {
+        return parts[1]; // Return the fruit part
     }
-    
-    // TODO: In a full implementation, we'd use another model to classify
-    // the fruit type, but for now we'll just return 'apple' as a default
-    return 'apple';
+    return 'unknown';
 }
 
 /**
- * Get fruit type from filename
- * @param {string} fileName - The file name to parse
- * @returns {string} Detected fruit type or 'unknown'
+ * Classify an image using the loaded model
+ * @param {HTMLImageElement} imgElement - The image element to classify
+ * @returns {Promise<Object>} The classification results
  */
-function getFruitTypeFromFileName(fileName) {
-    if (!fileName) return 'unknown';
-    
-    // Convert filename to lowercase for matching
-    const name = fileName.toLowerCase();
-    
-    // If we have fruit metadata, use that for matching
-    if (fruitMetadata && fruitMetadata.fruits) {
-        for (const fruit of fruitMetadata.fruits) {
-            // Check if the fruit name is in the filename
-            if (name.includes(fruit.name)) {
-                return fruit.name;
-            }
-            
-            // Also check if any variants are in the filename
-            if (fruit.variants) {
-                for (const variant of fruit.variants) {
-                    if (name.includes(variant.toLowerCase())) {
-                        return fruit.name;
-                    }
-                }
-            }
+async function classifyImage(imgElement) {
+    // Ensure model is loaded
+    if (!model) {
+        try {
+            await initializeClassifier();
+        } catch (error) {
+            throw new Error('Model could not be loaded: ' + error.message);
         }
     }
     
-    // Fallback to a simpler check with common fruits
-    const commonFruits = [
-        'apple', 'banana', 'orange', 'strawberry', 'grape', 
-        'blueberry', 'pear', 'peach', 'plum', 'mango',
-        'kiwi', 'pineapple', 'watermelon', 'cherry'
-    ];
+    try {
+        console.log('Starting image classification');
+        
+        // Process the image
+        const processedImage = preprocessImage(imgElement);
+        
+        // Get prediction from model
+        const predictions = model.predict(processedImage);
+        
+        // Get the data from the tensor
+        const predictionData = predictions.dataSync();
+        
+        // Cleanup tensors
+        tf.dispose([processedImage, predictions]);
+        
+        // Format the results
+        const results = formatResults(predictionData);
+        console.log('Classification complete:', results);
+        
+        // Create and dispatch classification-complete event
+        const event = new CustomEvent('classification-complete', {
+            detail: results
+        });
+        document.dispatchEvent(event);
+        
+        return results;
+    } catch (error) {
+        console.error('Error during classification:', error);
+        throw error;
+    }
+}
+
+/**
+ * Map the model's binary classification to our four ripeness categories
+ * @param {string} className - The class name from the model
+ * @returns {string} The mapped ripeness category
+ */
+function mapToRipenessCategory(className) {
+    // Use our mapping or fallback to binary fresh/rotten logic
+    if (RIPENESS_MAPPING[className]) {
+        return RIPENESS_MAPPING[className];
+    }
     
-    for (const fruit of commonFruits) {
-        if (name.includes(fruit)) {
-            return fruit;
-        }
+    // Fallback logic based on class name
+    if (className.startsWith('fresh_')) {
+        return 'ripe';
+    } else if (className.startsWith('rotten_')) {
+        return 'spoiled';
     }
     
     return 'unknown';
+}
+
+/**
+ * Format the raw prediction data into a more usable structure
+ * @param {Array} predictionData - The raw prediction data from the model
+ * @returns {Object} Formatted classification results
+ */
+function formatResults(predictionData) {
+    // Get the index of the highest confidence score
+    const highestIndex = predictionData.indexOf(Math.max(...predictionData));
+    const predictedClass = INDICES_TO_CLASS[highestIndex];
+    
+    // Extract fruit type from the class name
+    const fruitType = extractFruitType(predictedClass);
+    
+    // Map to ripeness category (fresh -> ripe, rotten -> spoiled)
+    const ripeness = mapToRipenessCategory(predictedClass);
+    
+    // Get fruit-specific metadata
+    const fruit = getFruitMetadata(fruitType);
+    const fruitDisplayName = fruit ? fruit.displayName : capitalizeFirstLetter(fruitType);
+    
+    // Group confidence scores by ripeness category
+    const ripenessConfidences = {};
+    RIPENESS_CATEGORIES.forEach(category => {
+        ripenessConfidences[category] = 0;
+    });
+    
+    // Aggregate confidence scores by ripeness category
+    Object.keys(INDICES_TO_CLASS).forEach(index => {
+        const className = INDICES_TO_CLASS[index];
+        const category = mapToRipenessCategory(className);
+        
+        if (category in ripenessConfidences) {
+            ripenessConfidences[category] += predictionData[index] * 100; // Convert to percentage
+        }
+    });
+    
+    // Create all confidences array in the format expected by the UI
+    const allConfidences = Object.keys(ripenessConfidences).map(category => ({
+        category: category,
+        confidence: ripenessConfidences[category]
+    }));
+    
+    // Create the results object
+    return {
+        fruitType: fruitType,
+        fruitDisplayName: fruitDisplayName,
+        ripeness: ripeness,
+        confidence: predictionData[highestIndex] * 100, // Convert to percentage
+        allConfidences: allConfidences,
+        recommendedAction: getRecommendationText(ripeness, fruitType),
+        ripenessIndicators: getRipenessIndicators(ripeness, fruitType),
+        timestamp: new Date()
+    };
 }
 
 /**
@@ -253,89 +386,6 @@ function getRipenessIndicators(category, fruitType) {
 }
 
 /**
- * Classify an image using the loaded model
- * @param {HTMLImageElement} imgElement - The image element to classify
- * @param {string} [fileName=''] - Optional file name which may contain fruit type
- * @returns {Promise<Object>} The classification results
- */
-async function classifyImage(imgElement, fileName = '') {
-    // Ensure model is loaded
-    if (!model) {
-        try {
-            await initializeClassifier();
-        } catch (error) {
-            throw new Error('Model could not be loaded: ' + error.message);
-        }
-    }
-    
-    try {
-        console.log('Starting image classification');
-        
-        // Identify the type of fruit (from filename or image analysis)
-        const fruitType = identifyFruitType(imgElement, fileName);
-        console.log('Identified fruit type:', fruitType);
-        
-        // Process the image
-        const processedImage = preprocessImage(imgElement);
-        
-        // Get prediction from model
-        const predictions = model.predict(processedImage);
-        
-        // Get the data from the tensor
-        const predictionData = predictions.dataSync();
-        
-        // Cleanup tensors
-        tf.dispose([processedImage, predictions]);
-        
-        // Format the results
-        const results = formatResults(predictionData, fruitType);
-        console.log('Classification complete:', results);
-        
-        // Create and dispatch classification-complete event
-        const event = new CustomEvent('classification-complete', {
-            detail: results
-        });
-        document.dispatchEvent(event);
-        
-        return results;
-    } catch (error) {
-        console.error('Error during classification:', error);
-        throw error;
-    }
-}
-
-/**
- * Format the raw prediction data into a more usable structure
- * @param {Array} predictionData - The raw prediction data from the model
- * @param {string} fruitType - The type of fruit
- * @returns {Object} Formatted classification results
- */
-function formatResults(predictionData, fruitType) {
-    // Get the index of the highest confidence score
-    const highestIndex = predictionData.indexOf(Math.max(...predictionData));
-    const ripeness = RIPENESS_CATEGORIES[highestIndex];
-    
-    // Get fruit-specific metadata
-    const fruit = getFruitMetadata(fruitType);
-    const fruitDisplayName = fruit ? fruit.displayName : capitalizeFirstLetter(fruitType);
-    
-    // Create the results object
-    return {
-        fruitType: fruitType,
-        fruitDisplayName: fruitDisplayName,
-        ripeness: ripeness,
-        confidence: predictionData[highestIndex] * 100, // Convert to percentage
-        allConfidences: RIPENESS_CATEGORIES.map((category, index) => ({
-            category: category,
-            confidence: predictionData[index] * 100 // Convert to percentage
-        })),
-        recommendedAction: getRecommendationText(ripeness, fruitType),
-        ripenessIndicators: getRipenessIndicators(ripeness, fruitType),
-        timestamp: new Date()
-    };
-}
-
-/**
  * Capitalize the first letter of a string
  * @param {string} string - The string to capitalize
  * @returns {string} The capitalized string
@@ -349,4 +399,3 @@ function capitalizeFirstLetter(string) {
 window.initializeClassifier = initializeClassifier;
 window.classifyImage = classifyImage;
 window.preprocessImage = preprocessImage;
-window.getFruitTypeFromFileName = getFruitTypeFromFileName;

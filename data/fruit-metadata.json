@@ -4,140 +4,55 @@
       "name": "apple",
       "displayName": "Apple",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, bright green or light red color",
-        "ripe": "Firm but slightly yielding texture, bright red or yellow color",
-        "overripe": "Softer texture, deeper color, slight bruising may appear",
-        "spoiled": "Very soft texture, browning, visible mold or rot"
+      "qualityIndicators": {
+        "fresh": "Firm texture, bright color, no blemishes",
+        "rotten": "Soft spots, browning, visible mold or rot"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature away from direct sunlight",
-        "ripe": "Refrigerate for up to 1-2 weeks",
-        "overripe": "Use immediately or refrigerate for 1-2 days",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 1-2 weeks",
+        "rotten": "Discard"
       },
       "variants": ["Red Delicious", "Golden Delicious", "Gala", "Granny Smith", "Pink Lady", "Fuji", "Honeycrisp"]
-    },
-    {
-      "name": "apricot",
-      "displayName": "Apricot",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Firm, pale yellow or greenish color",
-        "ripe": "Soft but not mushy, golden-orange color",
-        "overripe": "Very soft, dark orange color, possibly browning",
-        "spoiled": "Mushy texture, brown coloration, mold present"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature for 1-2 days",
-        "ripe": "Refrigerate for up to 3-5 days",
-        "overripe": "Use immediately or freeze for smoothies",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "avocado",
-      "displayName": "Avocado",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Hard texture, bright green skin",
-        "ripe": "Yields to gentle pressure, dark green to black skin",
-        "overripe": "Very soft, possibly dented skin",
-        "spoiled": "Extremely mushy, brown flesh, mold present"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature until ripe",
-        "ripe": "Refrigerate for up to 2-3 days",
-        "overripe": "Use immediately, good for guacamole",
-        "spoiled": "Discard"
-      },
-      "variants": ["Hass", "Fuerte", "Reed"]
     },
     {
       "name": "banana",
       "displayName": "Banana",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Green color, firm texture",
-        "ripe": "Yellow color with small brown spots, slightly soft",
-        "overripe": "Yellow with many brown spots, soft texture",
-        "spoiled": "Mostly brown or black, mushy texture"
+      "qualityIndicators": {
+        "fresh": "Yellow color with small brown spots, slightly soft",
+        "rotten": "Mostly brown or black, mushy texture"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature away from other fruit",
-        "ripe": "Room temperature, will last 1-2 days",
-        "overripe": "Refrigerate or freeze for baking",
-        "spoiled": "Discard or use in baking if no mold present"
+        "fresh": "Room temperature, will last 3-5 days",
+        "rotten": "Discard or use in baking if no mold present"
       },
       "variants": ["Cavendish", "Lady Finger", "Red", "Plantain"]
-    },
-    {
-      "name": "blueberry",
-      "displayName": "Blueberry",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Small size, reddish or pink color",
-        "ripe": "Plump, deep blue color with slight dusty appearance",
-        "overripe": "Very soft, leaking juice, wrinkled appearance",
-        "spoiled": "Moldy, mushy texture, fermented smell"
-      },
-      "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Refrigerate for up to 1-2 weeks",
-        "overripe": "Use immediately or freeze for smoothies",
-        "spoiled": "Discard"
-      }
     },
     {
       "name": "cherry",
       "displayName": "Cherry",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Small size, light red or pinkish color, firm texture",
-        "ripe": "Deep red color, plump, slightly firm",
-        "overripe": "Very dark red, soft texture, wrinkled skin",
-        "spoiled": "Moldy, extremely soft, leaking juice"
+      "qualityIndicators": {
+        "fresh": "Deep red color, plump, slightly firm, glossy skin",
+        "rotten": "Moldy, extremely soft, leaking juice, dull appearance"
       },
       "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Refrigerate for up to 1 week",
-        "overripe": "Use immediately or freeze",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 1 week",
+        "rotten": "Discard"
       },
       "variants": ["Bing", "Rainier", "Black", "Sour"]
-    },
-    {
-      "name": "coconut",
-      "displayName": "Coconut",
-      "category": "nut",
-      "ripenessIndicators": {
-        "unripe": "Green outer husk, clear liquid inside",
-        "ripe": "Brown fibrous husk, firm white flesh, sweet liquid",
-        "overripe": "Brown husk, slightly yellow flesh, less liquid",
-        "spoiled": "Cracked or moldy husk, sour smell, discolored flesh"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature for drinking the water",
-        "ripe": "Room temperature for up to 2 weeks, refrigerate opened coconut",
-        "overripe": "Use immediately",
-        "spoiled": "Discard"
-      }
     },
     {
       "name": "grape",
       "displayName": "Grape",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Small size, green or light color, very firm",
-        "ripe": "Full size, deep color (green, red, or purple), slightly firm",
-        "overripe": "Wrinkled skin, very soft, leaking juice",
-        "spoiled": "Moldy, fermented smell, mushy texture"
+      "qualityIndicators": {
+        "fresh": "Full size, deep color (green, red, or purple), slightly firm",
+        "rotten": "Wrinkled skin, very soft, leaking juice, moldy"
       },
       "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Refrigerate for up to 1-2 weeks",
-        "overripe": "Use immediately or freeze",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 1-2 weeks",
+        "rotten": "Discard"
       },
       "variants": ["Red Globe", "Concord", "Green", "Black"]
     },
@@ -145,70 +60,27 @@
       "name": "kiwi",
       "displayName": "Kiwi",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, tart taste",
-        "ripe": "Yields to gentle pressure, sweet-tart taste",
-        "overripe": "Very soft, wrinkled skin",
-        "spoiled": "Extremely soft, moldy, fermented smell"
+      "qualityIndicators": {
+        "fresh": "Yields to gentle pressure, sweet-tart taste",
+        "rotten": "Extremely soft, moldy, fermented smell"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature until ripe",
-        "ripe": "Refrigerate for up to 1-2 weeks",
-        "overripe": "Use immediately or freeze for smoothies",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 1-2 weeks",
+        "rotten": "Discard"
       },
       "variants": ["Green", "Golden"]
-    },
-    {
-      "name": "lemon",
-      "displayName": "Lemon",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Green color, very firm texture",
-        "ripe": "Bright yellow color, slight give when pressed",
-        "overripe": "Dull yellow color, soft spots, wrinkled skin",
-        "spoiled": "Very soft, moldy, discolored"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature until yellow",
-        "ripe": "Room temperature for 1 week or refrigerate for up to 3 weeks",
-        "overripe": "Use immediately",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "lime",
-      "displayName": "Lime",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Light green color, very firm",
-        "ripe": "Deep green color, slight give when pressed",
-        "overripe": "Yellowish color, soft spots",
-        "spoiled": "Brown spots, very soft, moldy"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature until ripe",
-        "ripe": "Room temperature for up to 1 week or refrigerate for 2-3 weeks",
-        "overripe": "Use immediately",
-        "spoiled": "Discard"
-      },
-      "variants": ["Persian", "Key", "Kaffir"]
     },
     {
       "name": "mango",
       "displayName": "Mango",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Hard texture, bright green color",
-        "ripe": "Slightly soft when pressed, yellow or red color",
-        "overripe": "Very soft, wrinkled skin, strong aroma",
-        "spoiled": "Extremely soft, dark spots, fermented smell"
+      "qualityIndicators": {
+        "fresh": "Slightly soft when pressed, yellow or red color",
+        "rotten": "Extremely soft, dark spots, fermented smell"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 3-5 days",
-        "ripe": "Refrigerate for up to 5 days",
-        "overripe": "Use immediately or freeze",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 5 days",
+        "rotten": "Discard"
       },
       "variants": ["Alphonso", "Ataulfo", "Tommy Atkins", "Kent"]
     },
@@ -216,17 +88,13 @@
       "name": "orange",
       "displayName": "Orange",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Light orange or greenish tint, firm texture",
-        "ripe": "Bright orange color, slightly soft when pressed",
-        "overripe": "Dark orange color, very soft, slightly wrinkled skin",
-        "spoiled": "Moldy spots, extremely soft, strong fermented smell"
+      "qualityIndicators": {
+        "fresh": "Bright orange color, slightly soft when pressed",
+        "rotten": "Moldy spots, extremely soft, strong fermented smell"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 1-2 days",
-        "ripe": "Refrigerate for up to 2 weeks",
-        "overripe": "Use immediately or refrigerate for 1-2 days",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 2 weeks",
+        "rotten": "Discard"
       },
       "variants": ["Navel", "Valencia", "Blood", "Cara Cara"]
     },
@@ -234,17 +102,13 @@
       "name": "peach",
       "displayName": "Peach",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, greenish tint, no aroma",
-        "ripe": "Yields to gentle pressure, yellow/red color, sweet aroma",
-        "overripe": "Very soft, deeply colored, strong aroma",
-        "spoiled": "Mushy texture, brown spots, mold present"
+      "qualityIndicators": {
+        "fresh": "Yields to gentle pressure, yellow/red color, sweet aroma",
+        "rotten": "Mushy texture, brown spots, mold present"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 1-3 days",
-        "ripe": "Refrigerate for up to 3-5 days",
-        "overripe": "Use immediately or freeze",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 3-5 days",
+        "rotten": "Discard"
       },
       "variants": ["Yellow", "White", "Donut", "Nectarine"]
     },
@@ -252,330 +116,96 @@
       "name": "pear",
       "displayName": "Pear",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, greenish color",
-        "ripe": "Yields to gentle pressure at neck, yellow/green color",
-        "overripe": "Very soft, brown spots, deep yellow color",
-        "spoiled": "Mushy texture, dark brown areas, mold present"
+      "qualityIndicators": {
+        "fresh": "Yields to gentle pressure at neck, yellow/green color",
+        "rotten": "Mushy texture, dark brown areas, mold present"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 2-4 days",
-        "ripe": "Refrigerate for up to 5-7 days",
-        "overripe": "Use immediately or refrigerate for 1-2 days",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 5-7 days",
+        "rotten": "Discard"
       },
       "variants": ["Bartlett", "Anjou", "Bosc", "Comice", "Asian"]
-    },
-    {
-      "name": "pineapple",
-      "displayName": "Pineapple",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Green outer shell, firm texture, minimal aroma",
-        "ripe": "Golden-yellow color, slight give when pressed, sweet aroma",
-        "overripe": "Orange-yellow color, soft texture, fermented smell",
-        "spoiled": "Brown color, leaking juice, mold present"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature for 1-2 days",
-        "ripe": "Refrigerate for up to 5-7 days",
-        "overripe": "Use immediately or freeze for smoothies",
-        "spoiled": "Discard"
-      }
     },
     {
       "name": "plum",
       "displayName": "Plum",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, light color",
-        "ripe": "Slightly soft, deep purple/red color",
-        "overripe": "Very soft, wrinkled skin",
-        "spoiled": "Extremely soft, leaking juice, mold present"
+      "qualityIndicators": {
+        "fresh": "Slightly soft, deep purple/red color",
+        "rotten": "Extremely soft, leaking juice, mold present"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 1-2 days",
-        "ripe": "Refrigerate for up to 3-5 days",
-        "overripe": "Use immediately or freeze",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 3-5 days",
+        "rotten": "Discard"
       },
       "variants": ["Black", "Red", "Yellow", "Green"]
-    },
-    {
-      "name": "pomegranate",
-      "displayName": "Pomegranate",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Bright red color, angular shape, hard exterior",
-        "ripe": "Deep red color, rounded shape, leathery but firm exterior",
-        "overripe": "Dark red, soft spots, slightly cracked skin",
-        "spoiled": "Very dark color, mold present, fermented smell"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature for 1-2 days",
-        "ripe": "Refrigerate for up to 1-2 months",
-        "overripe": "Use immediately or refrigerate up to 1 week",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "raspberry",
-      "displayName": "Raspberry",
-      "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Small size, light pink/red color, hard texture",
-        "ripe": "Bright red color, plump berries, easily detached from stem",
-        "overripe": "Dark red, very soft, leaking juice",
-        "spoiled": "Moldy, mushy texture, fermented smell"
-      },
-      "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Refrigerate for up to 2-3 days",
-        "overripe": "Use immediately or freeze for smoothies",
-        "spoiled": "Discard"
-      },
-      "variants": ["Red", "Black", "Golden"]
     },
     {
       "name": "strawberry",
       "displayName": "Strawberry",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "White or light pink color, firm texture",
-        "ripe": "Bright red color, slight give when pressed",
-        "overripe": "Deep red color, very soft, slight juice leakage",
-        "spoiled": "Dark red/brown color, mushy texture, mold present"
+      "qualityIndicators": {
+        "fresh": "Bright red color, slight give when pressed",
+        "rotten": "Dark red/brown color, mushy texture, mold present"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 1 day",
-        "ripe": "Refrigerate for up to 3-5 days",
-        "overripe": "Use immediately or freeze for smoothies",
-        "spoiled": "Discard"
+        "fresh": "Refrigerate for up to 3-5 days",
+        "rotten": "Discard"
       }
-    },
-    {
-      "name": "tomato",
-      "displayName": "Tomato",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, green or light red color",
-        "ripe": "Bright red color, slight give when pressed",
-        "overripe": "Very soft, deep red color, wrinkled skin",
-        "spoiled": "Moldy, leaking juice, fermented smell"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature until ripe",
-        "ripe": "Room temperature for best flavor, refrigerate for longer storage (up to 1 week)",
-        "overripe": "Use immediately for sauces or soups",
-        "spoiled": "Discard"
-      },
-      "variants": ["Cherry", "Roma", "Beefsteak", "Grape", "Heirloom"]
     },
     {
       "name": "watermelon",
       "displayName": "Watermelon",
       "category": "fruit",
-      "ripenessIndicators": {
-        "unripe": "Light colored exterior, white or pale pink flesh",
-        "ripe": "Deep green exterior with yellow spot, bright red flesh",
-        "overripe": "Dull exterior, mealy texture, oversweet taste",
-        "spoiled": "Slimy texture, fermented smell, mold present"
+      "qualityIndicators": {
+        "fresh": "Deep green exterior with yellow spot, bright red flesh",
+        "rotten": "Slimy texture, fermented smell, mold present, discoloration"
       },
       "storageRecommendations": {
-        "unripe": "Room temperature for 2-3 days",
-        "ripe": "Room temperature (whole) for up to 1 week, refrigerate cut pieces",
-        "overripe": "Use immediately",
-        "spoiled": "Discard"
+        "fresh": "Room temperature (whole) for up to 1 week, refrigerate cut pieces",
+        "rotten": "Discard"
       },
       "variants": ["Seeded", "Seedless", "Yellow", "Mini"]
-    },
-    {
-      "name": "bell_pepper",
-      "displayName": "Bell Pepper",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Green color, firm texture",
-        "ripe": "Yellow/orange/red color (depending on variety), firm texture",
-        "overripe": "Wrinkled skin, soft spots",
-        "spoiled": "Moldy, very soft, wet texture"
-      },
-      "storageRecommendations": {
-        "unripe": "Refrigerate for up to 1-2 weeks",
-        "ripe": "Refrigerate for up to 1 week",
-        "overripe": "Use immediately",
-        "spoiled": "Discard"
-      },
-      "variants": ["Green", "Red", "Yellow", "Orange"]
-    },
-    {
-      "name": "eggplant",
-      "displayName": "Eggplant",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Bright green calyx, very firm, shiny skin",
-        "ripe": "Dark purple/black skin, slight give when pressed",
-        "overripe": "Dull skin, soft texture, brown spots",
-        "spoiled": "Very soft, moldy, strong odor"
-      },
-      "storageRecommendations": {
-        "unripe": "Room temperature for 1-2 days",
-        "ripe": "Refrigerate for up to 5-7 days",
-        "overripe": "Use immediately",
-        "spoiled": "Discard"
-      },
-      "variants": ["Globe", "Japanese", "White", "Fairy Tale"]
-    },
-    {
-      "name": "potato",
-      "displayName": "Potato",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Firm texture, no sprouts",
-        "ripe": "Firm texture, no sprouts, skin intact",
-        "overripe": "Beginning to sprout, slightly soft",
-        "spoiled": "Green areas, extensive sprouting, soft spots, mold"
-      },
-      "storageRecommendations": {
-        "unripe": "Store in cool, dark place",
-        "ripe": "Store in cool, dark place for up to 2-3 months",
-        "overripe": "Remove sprouts and use immediately",
-        "spoiled": "Discard"
-      },
-      "variants": ["Russet", "Red", "Yukon Gold", "Sweet", "Fingerling"]
-    },
-    {
-      "name": "walnut",
-      "displayName": "Walnut",
-      "category": "nut",
-      "ripenessIndicators": {
-        "unripe": "Green outer husk, soft shell",
-        "ripe": "Brown shell, firm texture, light color meat",
-        "overripe": "Still edible if properly stored",
-        "spoiled": "Rancid smell, shriveled meat, mold present"
-      },
-      "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Store in cool, dry place for up to 1 year, refrigerate for longer storage",
-        "overripe": "Use immediately if not rancid",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "almond",
-      "displayName": "Almond",
-      "category": "nut",
-      "ripenessIndicators": {
-        "unripe": "Green outer hull, soft shell",
-        "ripe": "Brown shell, creamy white meat",
-        "overripe": "Still edible if properly stored",
-        "spoiled": "Rancid smell, discolored meat, mold present"
-      },
-      "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Store in cool, dry place for up to 1 year, refrigerate for longer storage",
-        "overripe": "Use immediately if not rancid",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "zucchini",
-      "displayName": "Zucchini",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Very small size, firm texture",
-        "ripe": "Medium size, firm texture, glossy skin",
-        "overripe": "Large size, soft spots, dull skin",
-        "spoiled": "Very soft, moldy, leaking moisture"
-      },
-      "storageRecommendations": {
-        "unripe": "Refrigerate for up to 5-7 days",
-        "ripe": "Refrigerate for up to 3-5 days",
-        "overripe": "Use immediately for baking",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "corn",
-      "displayName": "Corn",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Pale yellow kernels, not fully formed",
-        "ripe": "Bright yellow kernels, full and plump",
-        "overripe": "Dented kernels, less sweet taste",
-        "spoiled": "Moldy, slimy, strong odor"
-      },
-      "storageRecommendations": {
-        "unripe": "Not recommended for consumption",
-        "ripe": "Refrigerate with husks for up to 1-2 days",
-        "overripe": "Use immediately for cooking",
-        "spoiled": "Discard"
-      }
-    },
-    {
-      "name": "carrot",
-      "displayName": "Carrot",
-      "category": "vegetable",
-      "ripenessIndicators": {
-        "unripe": "Bright orange color, very firm texture",
-        "ripe": "Deep orange color, firm texture",
-        "overripe": "Soft spots, beginning to shrivel",
-        "spoiled": "Very limp, moldy, slimy texture"
-      },
-      "storageRecommendations": {
-        "unripe": "Refrigerate for up to 2-3 weeks",
-        "ripe": "Refrigerate for up to 2 weeks",
-        "overripe": "Use immediately for cooking or juicing",
-        "spoiled": "Discard"
-      }
     }
   ],
   "metadata": {
     "version": "1.0.0",
     "lastUpdated": "2025-02-27",
-    "categories": ["fruit", "vegetable", "nut"],
-    "ripenessLevels": [
+    "categories": ["fruit"],
+    "qualityLevels": [
       {
-        "id": "unripe",
-        "displayName": "Unripe",
-        "description": "Not yet ready for consumption",
-        "colorCode": "#8bc34a"
-      },
-      {
-        "id": "ripe",
-        "displayName": "Ripe",
+        "id": "fresh",
+        "displayName": "Fresh",
         "description": "Optimal for consumption",
-        "colorCode": "#4caf50"
+        "colorCode": "#4caf50",
+        "ripenessMapping": ["ripe", "unripe"]
       },
       {
-        "id": "overripe",
-        "displayName": "Overripe",
-        "description": "Past ideal consumption stage but still usable",
-        "colorCode": "#ff9800"
-      },
-      {
-        "id": "spoiled",
-        "displayName": "Spoiled",
+        "id": "rotten",
+        "displayName": "Rotten",
         "description": "Not safe for consumption",
-        "colorCode": "#f44336"
+        "colorCode": "#f44336",
+        "ripenessMapping": ["overripe", "spoiled"]
       }
     ],
     "model": {
-      "name": "FruitRipenessClassifier",
+      "name": "FruitQualityClassifier",
       "baseModel": "MobileNetV2",
       "inputSize": [224, 224, 3],
-      "outputClasses": 4,
+      "outputClasses": 2,
       "classMapping": [
-        "unripe",
-        "ripe",
-        "overripe",
-        "spoiled"
+        "fresh",
+        "rotten"
       ],
       "datasetInfo": {
-        "name": "Fruits-360",
-        "adaption": "Modified with ripeness stages",
-        "numClasses": 131,
-        "trainSamples": 67500,
-        "testSamples": 22500
+        "name": "Fruits Quality (Fresh VS Rotten)",
+        "source": "Kaggle",
+        "url": "https://www.kaggle.com/datasets/nourabdoun/fruits-quality-fresh-vs-rotten",
+        "fruitTypes": [
+          "Apple", "Banana", "Cherry", "Grape", "Kiwi", "Mango", 
+          "Orange", "Peach", "Pear", "Plum", "Strawberry", "Watermelon"
+        ],
+        "categories": ["Fresh", "Rotten"]
       }
     }
   }

@@ -45,6 +45,24 @@
           }
         },
         {
+          "class_name": "Conv2D",
+          "config": {
+            "filters": 128,
+            "kernel_size": [3, 3],
+            "strides": [1, 1],
+            "padding": "valid",
+            "activation": "relu"
+          }
+        },
+        {
+          "class_name": "MaxPooling2D",
+          "config": {
+            "pool_size": [2, 2],
+            "strides": [2, 2],
+            "padding": "valid"
+          }
+        },
+        {
           "class_name": "Flatten",
           "config": {}
         },
@@ -56,9 +74,15 @@
           }
         },
         {
+          "class_name": "Dropout",
+          "config": {
+            "rate": 0.5
+          }
+        },
+        {
           "class_name": "Dense",
           "config": {
-            "units": 4,
+            "units": 2,
             "activation": "softmax"
           }
         }

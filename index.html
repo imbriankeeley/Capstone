@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- File: fruit-ripeness-classifier/index.html -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Ripeness Classification System</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Fruit Ripeness Classification System</h1>
+    </header>
+
+    <main>
+        <section id="upload-section">
+            <h2>Upload Fruit Image</h2>
+            <div class="upload-container">
+                <div class="drop-area" id="drop-area">
+                    <p>Drag & drop fruit image here or</p>
+                    <button id="upload-button">Select Image</button>
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                </div>
+                <div id="image-preview" class="image-preview"></div>
+            </div>
+        </section>
+
+        <section id="results-section" class="hidden">
+            <h2>Classification Results</h2>
+            <div id="results-container"></div>
+        </section>
+
+        <section id="dashboard-section">
+            <h2>Ripeness Dashboard</h2>
+            <div class="dashboard-container">
+                <div class="chart-container">
+                    <canvas id="ripeness-distribution-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="ripeness-heatmap"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Fruit Ripeness Classification System - Reducing Food Waste Through Technology</p>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/utils.js"></script>
+    <script src="js/classifier.js"></script>
+    <script src="js/upload.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/components/dashboard.js"></script>
+    <script src="js/components/results-display.js"></script>
+    <script src="js/components/image-preview.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -24,11 +24,6 @@ function initializeResultsDisplay() {
     placeholder.className = 'results-placeholder';
     resultsContainer.appendChild(placeholder);
     
-    // Add event listener for classification results
-    document.addEventListener('classification-complete', (event) => {
-        displayResults(event.detail);
-    });
-    
     console.log('Results display component initialized');
 }
 
@@ -44,8 +39,6 @@ function displayResults(results) {
         return;
     }
     
-    console.log('Displaying classification results:', results);
-    
     // Clear existing content
     resultsContainer.innerHTML = '';
     
@@ -53,9 +46,9 @@ function displayResults(results) {
     const resultCard = document.createElement('div');
     resultCard.className = 'result-card';
     
-    // Add fruit type and ripeness result
+    // Add ripeness result
     const ripenessResult = document.createElement('h3');
-    ripenessResult.innerHTML = `${results.fruitDisplayName}: <span class="${results.ripeness}">${capitalizeFirstLetter(results.ripeness)}</span> <span class="badge ${results.ripeness}">${capitalizeFirstLetter(results.ripeness)}</span>`;
+    ripenessResult.innerHTML = `Ripeness: <span class="${results.ripeness}">${capitalizeFirstLetter(results.ripeness)}</span>`;
     resultCard.appendChild(ripenessResult);
     
     // Add confidence score
@@ -66,14 +59,6 @@ function displayResults(results) {
     // Add confidence bar
     const confidenceBar = createConfidenceBar(results.ripeness, results.confidence);
     resultCard.appendChild(confidenceBar);
-    
-    // Add quality indicators section
-    if (results.ripenessIndicators) {
-        const indicatorsDiv = document.createElement('div');
-        indicatorsDiv.className = 'quality-indicators';
-        indicatorsDiv.innerHTML = `<h4>Quality Indicators:</h4><p>${results.ripenessIndicators}</p>`;
-        resultCard.appendChild(indicatorsDiv);
-    }
     
     // Add recommended action
     const actionElement = document.createElement('div');
@@ -88,8 +73,11 @@ function displayResults(results) {
     const detailedResults = createDetailedResults(results.allConfidences);
     resultsContainer.appendChild(detailedResults);
     
-    // Trigger an event for dashboard to update
-    updateDashboard(results);
+    // Trigger an event indicating results have been displayed
+    const event = new CustomEvent('results-displayed', {
+        detail: results
+    });
+    document.dispatchEvent(event);
 }
 
 /**
@@ -103,20 +91,11 @@ function createConfidenceBar(ripeness, confidence) {
     barContainer.className = 'confidence-bar';
     
     const bar = document.createElement('div');
-    bar.className = `confidence-fill ${ripeness}-bg`;
-    
-    // Animate the width after a short delay
-    setTimeout(() => {
-        bar.style.width = `${confidence}%`;
-    }, 50);
-    
-    const percentText = document.createElement('span');
-    percentText.className = 'confidence-percentage';
-    percentText.textContent = `${confidence.toFixed(1)}%`;
+    bar.className = `confidence-fill ${ripeness}`;
+    bar.style.width = `${confidence}%`;
+    bar.style.backgroundColor = getRipenessColor(ripeness);
     
     barContainer.appendChild(bar);
-    barContainer.appendChild(percentText);
-    
     return barContainer;
 }
 
@@ -127,7 +106,7 @@ function createConfidenceBar(ripeness, confidence) {
  */
 function createDetailedResults(allConfidences) {
     const detailedContainer = document.createElement('div');
-    detailedContainer.className = 'detailed-results result-card';
+    detailedContainer.className = 'detailed-results';
     
     const heading = document.createElement('h4');
     heading.textContent = 'Detailed Confidence Scores:';
@@ -139,9 +118,6 @@ function createDetailedResults(allConfidences) {
     // Create a list of all confidence scores
     const list = document.createElement('ul');
     sortedConfidences.forEach(item => {
-        // Skip very low confidence scores (less than 1%)
-        if (item.confidence < 1) return;
-        
         const listItem = document.createElement('li');
         listItem.innerHTML = `<span class="${item.category}">${capitalizeFirstLetter(item.category)}</span>: ${item.confidence.toFixed(1)}%`;
         
@@ -158,6 +134,22 @@ function createDetailedResults(allConfidences) {
 }
 
 /**
+ * Get the color for a ripeness category
+ * @param {string} ripeness - The ripeness category
+ * @returns {string} The CSS color variable
+ */
+function getRipenessColor(ripeness) {
+    const colors = {
+        'unripe': 'var(--unripe-color)',
+        'ripe': 'var(--ripe-color)',
+        'overripe': 'var(--overripe-color)',
+        'spoiled': 'var(--spoiled-color)'
+    };
+    
+    return colors[ripeness] || colors['ripe']; // Default to ripe if not found
+}
+
+/**
  * Capitalize the first letter of a string
  * @param {string} string - The string to capitalize
  * @returns {string} The capitalized string
@@ -166,9 +158,7 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// Initialize the component when the page loads
-document.addEventListener('DOMContentLoaded', initializeResultsDisplay);
-
 // Export functions for use in other modules
-window.displayResults = displayResults;
-window.initializeResultsDisplay = initializeResultsDisplay;
+// Note: In a real application with modules, we would use proper export statements
+// window.displayResults = displayResults;
+// window.initializeResultsDisplay = initializeResultsDisplay;

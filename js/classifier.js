@@ -12,6 +12,53 @@ let isModelLoading = false;
 let fruitMetadata = null;
 const MODEL_PATH = 'model/model.json';
 
+// Class indices from the trained model
+// This should match the class indices from your training
+const CLASS_INDICES = {
+    // These will depend on your actual training results
+    // Format is 'class_name': index
+    'fresh_apple': 0, 'fresh_banana': 1, 'fresh_cherry': 2, 'fresh_grape': 3,
+    'fresh_kiwi': 4, 'fresh_mango': 5, 'fresh_orange': 6, 'fresh_peach': 7,
+    'fresh_pear': 8, 'fresh_plum': 9, 'fresh_strawberry': 10, 'fresh_watermelon': 11,
+    'rotten_apple': 12, 'rotten_banana': 13, 'rotten_cherry': 14, 'rotten_grape': 15,
+    'rotten_kiwi': 16, 'rotten_mango': 17, 'rotten_orange': 18, 'rotten_peach': 19,
+    'rotten_pear': 20, 'rotten_plum': 21, 'rotten_strawberry': 22, 'rotten_watermelon': 23
+};
+
+// Invert the class indices for easier lookup
+const INDICES_TO_CLASS = {};
+Object.keys(CLASS_INDICES).forEach(key => {
+    INDICES_TO_CLASS[CLASS_INDICES[key]] = key;
+});
+
+// Ripeness mapping from fresh/rotten to our four categories
+const RIPENESS_MAPPING = {
+    'fresh_apple': 'ripe',
+    'fresh_banana': 'ripe',
+    'fresh_cherry': 'ripe',
+    'fresh_grape': 'ripe',
+    'fresh_kiwi': 'ripe',
+    'fresh_mango': 'ripe',
+    'fresh_orange': 'ripe',
+    'fresh_peach': 'ripe',
+    'fresh_pear': 'ripe',
+    'fresh_plum': 'ripe',
+    'fresh_strawberry': 'ripe',
+    'fresh_watermelon': 'ripe',
+    'rotten_apple': 'spoiled',
+    'rotten_banana': 'spoiled',
+    'rotten_cherry': 'spoiled',
+    'rotten_grape': 'spoiled',
+    'rotten_kiwi': 'spoiled',
+    'rotten_mango': 'spoiled',
+    'rotten_orange': 'spoiled',
+    'rotten_peach': 'spoiled',
+    'rotten_pear': 'spoiled',
+    'rotten_plum': 'spoiled',
+    'rotten_strawberry': 'spoiled',
+    'rotten_watermelon': 'spoiled'
+};
+
 // Ripeness categories
 const RIPENESS_CATEGORIES = [
     'unripe',
@@ -82,11 +129,35 @@ function createMockModel() {
         predict: (tensor) => {
             console.log('Mock model prediction called');
             return {
-                dataSync: () => [Math.random() > 0.5 ? 0.8 : 0.2], // Binary output (fresh vs rotten)
+                dataSync: () => generateMockConfidences(),
                 dispose: () => {}
             };
         }
     };
+}
+
+/**
+ * Generate mock confidence scores for testing
+ * @returns {Array} Array of confidence values
+ */
+function generateMockConfidences() {
+    // Create an array with zeros
+    const values = new Array(Object.keys(CLASS_INDICES).length).fill(0);
+    
+    // Set a high value for one of the classes to simulate prediction
+    const randomIndex = Math.floor(Math.random() * values.length);
+    values[randomIndex] = 0.8;
+    
+    // Add some noise to other values
+    for (let i = 0; i < values.length; i++) {
+        if (i !== randomIndex) {
+            values[i] = Math.random() * 0.2 / (values.length - 1);
+        }
+    }
+    
+    // Normalize to ensure sum is 1
+    const sum = values.reduce((a, b) => a + b, 0);
+    return values.map(v => v / sum);
 }
 
 /**
@@ -100,7 +171,7 @@ function preprocessImage(imgElement) {
     return tf.tidy(() => {
         // Convert image to tensor
         const tensor = tf.browser.fromPixels(imgElement)
-            // Resize to the input dimensions the model expects (224x224)
+            // Resize to the input dimensions the model expects
             .resizeNearestNeighbor([224, 224])
             // Normalize pixel values to 0-1
             .toFloat()
@@ -113,45 +184,24 @@ function preprocessImage(imgElement) {
 }
 
 /**
- * Extract fruit type from the image or filename
- * @param {File|String} fileOrName - The file or filename to extract fruit type from
- * @returns {string} The fruit type
+ * Extract fruit type from class name
+ * @param {string} className - The class name (e.g., 'fresh_apple')
+ * @returns {string} The fruit type (e.g., 'apple')
  */
-function extractFruitType(fileOrName) {
-    let fileName = '';
-    
-    if (typeof fileOrName === 'string') {
-        fileName = fileOrName.toLowerCase();
-    } else if (fileOrName && fileOrName.name) {
-        fileName = fileOrName.name.toLowerCase();
-    } else {
-        return 'unknown';
+function extractFruitType(className) {
+    const parts = className.split('_');
+    if (parts.length > 1) {
+        return parts[1]; // Return the fruit part
     }
-    
-    // List of common fruits to detect
-    const fruits = [
-        'apple', 'banana', 'orange', 'strawberry', 'grape', 
-        'blueberry', 'pear', 'peach', 'plum', 'mango',
-        'kiwi', 'pineapple', 'watermelon', 'cherry'
-    ];
-    
-    // Find the first fruit that matches in the filename
-    for (const fruit of fruits) {
-        if (fileName.includes(fruit)) {
-            return fruit;
-        }
-    }
-    
     return 'unknown';
 }
 
 /**
  * Classify an image using the loaded model
  * @param {HTMLImageElement} imgElement - The image element to classify
- * @param {File} [originalFile] - Original file for metadata extraction
  * @returns {Promise<Object>} The classification results
  */
-async function classifyImage(imgElement, originalFile) {
+async function classifyImage(imgElement) {
     // Ensure model is loaded
     if (!model) {
         try {
@@ -170,14 +220,14 @@ async function classifyImage(imgElement, originalFile) {
         // Get prediction from model
         const predictions = model.predict(processedImage);
         
-        // Get the data from the tensor (confidence scores)
+        // Get the data from the tensor
         const predictionData = predictions.dataSync();
         
         // Cleanup tensors
         tf.dispose([processedImage, predictions]);
         
         // Format the results
-        const results = formatResults(predictionData, originalFile);
+        const results = formatResults(predictionData);
         console.log('Classification complete:', results);
         
         // Create and dispatch classification-complete event
@@ -194,84 +244,74 @@ async function classifyImage(imgElement, originalFile) {
 }
 
 /**
- * Map the binary classification to our ripeness categories
- * @param {number} score - Binary classification score (0-1)
+ * Map the model's binary classification to our four ripeness categories
+ * @param {string} className - The class name from the model
  * @returns {string} The mapped ripeness category
  */
-function mapScoreToRipenessCategory(score) {
-    // Convert score to proper ripeness category
-    // For binary classification, we'll use a threshold approach
-    if (score < 0.3) {
-        return 'ripe'; // Fresh
-    } else if (score < 0.7) {
-        return 'overripe'; // Starting to go bad
-    } else {
-        return 'spoiled'; // Rotten
+function mapToRipenessCategory(className) {
+    // Use our mapping or fallback to binary fresh/rotten logic
+    if (RIPENESS_MAPPING[className]) {
+        return RIPENESS_MAPPING[className];
     }
+    
+    // Fallback logic based on class name
+    if (className.startsWith('fresh_')) {
+        return 'ripe';
+    } else if (className.startsWith('rotten_')) {
+        return 'spoiled';
+    }
+    
+    return 'unknown';
 }
 
 /**
  * Format the raw prediction data into a more usable structure
  * @param {Array} predictionData - The raw prediction data from the model
- * @param {File} [originalFile] - Original file for metadata extraction
  * @returns {Object} Formatted classification results
  */
-function formatResults(predictionData, originalFile) {
-    // For binary classification, we treat the output as a measure of "rottenness"
-    const rottenScore = predictionData[0];
+function formatResults(predictionData) {
+    // Get the index of the highest confidence score
+    const highestIndex = predictionData.indexOf(Math.max(...predictionData));
+    const predictedClass = INDICES_TO_CLASS[highestIndex];
     
-    // Extract fruit type from the file name
-    const fruitType = originalFile ? extractFruitType(originalFile) : 'unknown';
+    // Extract fruit type from the class name
+    const fruitType = extractFruitType(predictedClass);
     
-    // Map to ripeness category
-    const ripeness = mapScoreToRipenessCategory(rottenScore);
+    // Map to ripeness category (fresh -> ripe, rotten -> spoiled)
+    const ripeness = mapToRipenessCategory(predictedClass);
     
     // Get fruit-specific metadata
     const fruit = getFruitMetadata(fruitType);
     const fruitDisplayName = fruit ? fruit.displayName : capitalizeFirstLetter(fruitType);
     
-    // Create confidence scores for all ripeness categories
-    // This is a simplification since our model is binary,
-    // but we want to maintain the expected output structure
-    const confidenceMap = {
-        'unripe': 0,
-        'ripe': 0,
-        'overripe': 0,
-        'spoiled': 0
-    };
+    // Group confidence scores by ripeness category
+    const ripenessConfidences = {};
+    RIPENESS_CATEGORIES.forEach(category => {
+        ripenessConfidences[category] = 0;
+    });
     
-    // Set the confidence for the predicted category
-    // For binary model, we'll distribute confidences based on the score
-    if (rottenScore < 0.3) {
-        // Fresh fruit - mostly ripe with some possibility of unripe
-        confidenceMap['ripe'] = (1 - rottenScore) * 100;
-        confidenceMap['unripe'] = (0.3 - rottenScore) > 0 ? (0.3 - rottenScore) * 100 : 0;
-    } else if (rottenScore < 0.7) {
-        // Overripe fruit
-        confidenceMap['overripe'] = (rottenScore - 0.3) / 0.4 * 100;
-        confidenceMap['ripe'] = (0.7 - rottenScore) / 0.4 * 100;
-    } else {
-        // Spoiled fruit
-        confidenceMap['spoiled'] = rottenScore * 100;
-        confidenceMap['overripe'] = (1 - rottenScore) * 100 * 0.5;
-    }
+    // Aggregate confidence scores by ripeness category
+    Object.keys(INDICES_TO_CLASS).forEach(index => {
+        const className = INDICES_TO_CLASS[index];
+        const category = mapToRipenessCategory(className);
+        
+        if (category in ripenessConfidences) {
+            ripenessConfidences[category] += predictionData[index] * 100; // Convert to percentage
+        }
+    });
     
     // Create all confidences array in the format expected by the UI
-    const allConfidences = Object.keys(confidenceMap).map(category => ({
+    const allConfidences = Object.keys(ripenessConfidences).map(category => ({
         category: category,
-        confidence: confidenceMap[category]
+        confidence: ripenessConfidences[category]
     }));
-    
-    // Primary confidence is the one for the assigned category
-    const confidence = confidenceMap[ripeness];
     
     // Create the results object
     return {
         fruitType: fruitType,
         fruitDisplayName: fruitDisplayName,
         ripeness: ripeness,
-        confidence: confidence,
-        rawScore: rottenScore * 100, // Original score as percentage
+        confidence: predictionData[highestIndex] * 100, // Convert to percentage
         allConfidences: allConfidences,
         recommendedAction: getRecommendationText(ripeness, fruitType),
         ripenessIndicators: getRipenessIndicators(ripeness, fruitType),
@@ -314,12 +354,8 @@ function getRecommendationText(category, fruitType) {
     // Try to get fruit-specific recommendations from metadata
     const fruit = getFruitMetadata(fruitType);
     
-    if (fruit && fruit.storageRecommendations) {
-        // Map our ripeness categories to the metadata's fresh/rotten categories
-        const metadataCategory = (category === 'ripe' || category === 'unripe') ? 'fresh' : 'rotten';
-        if (fruit.storageRecommendations[metadataCategory]) {
-            return fruit.storageRecommendations[metadataCategory];
-        }
+    if (fruit && fruit.storageRecommendations && fruit.storageRecommendations[category]) {
+        return fruit.storageRecommendations[category];
     }
     
     // Fallback to generic recommendations
@@ -342,23 +378,11 @@ function getRecommendationText(category, fruitType) {
 function getRipenessIndicators(category, fruitType) {
     const fruit = getFruitMetadata(fruitType);
     
-    if (fruit && fruit.qualityIndicators) {
-        // Map our ripeness categories to the metadata's fresh/rotten categories
-        const metadataCategory = (category === 'ripe' || category === 'unripe') ? 'fresh' : 'rotten';
-        if (fruit.qualityIndicators[metadataCategory]) {
-            return fruit.qualityIndicators[metadataCategory];
-        }
+    if (fruit && fruit.ripenessIndicators && fruit.ripenessIndicators[category]) {
+        return fruit.ripenessIndicators[category];
     }
     
-    // Generic indicators if fruit-specific ones aren't available
-    const genericIndicators = {
-        'unripe': 'Firm texture, bright color, may be hard',
-        'ripe': 'Slight give when pressed, vibrant color, sweet aroma',
-        'overripe': 'Soft spots, darker coloration, very sweet smell',
-        'spoiled': 'Mushy texture, discoloration, mold, fermented smell'
-    };
-    
-    return genericIndicators[category] || 'No specific indicators available';
+    return 'No specific indicators available';
 }
 
 /**

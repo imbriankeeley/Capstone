@@ -1,0 +1,50 @@
+/* File: fruit-ripeness-classifier/css/responsive.css */
+/* Responsive styles for Fruit Ripeness Classification System */
+
+/* Mobile-first design */
+@media (max-width: 768px) {
+    main {
+        padding: 1rem;
+    }
+    
+    section {
+        padding: 1rem;
+    }
+    
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
+
+/* Tablets and small screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Larger screens */
+@media (min-width: 1025px) {
+    main {
+        padding: 2rem;
+    }
+}
+
+/* Ensure touch-friendly UI elements on mobile devices */
+@media (hover: none) {
+    button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Increase spacing for touch targets */
+    .upload-container, #results-container {
+        gap: 2rem;
+    }
+}
+
+/* TODO: Add additional responsive styles as needed */

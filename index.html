@@ -17,6 +17,7 @@
 <body>
     <header>
         <h1>Fruit Ripeness Classification System</h1>
+        <p>Reduce food waste through intelligent inventory management</p>
     </header>
 
     <main>
@@ -29,6 +30,10 @@
                     <input type="file" id="file-input" accept="image/*" hidden>
                 </div>
                 <div id="image-preview" class="image-preview"></div>
+                <div id="loading-indicator" class="loading-indicator hidden">
+                    <div class="spinner"></div>
+                    <p>Analyzing image...</p>
+                </div>
             </div>
         </section>
 
@@ -48,10 +53,33 @@
                 </div>
             </div>
         </section>
+
+        <section id="about-section">
+            <h2>About This System</h2>
+            <div class="about-container">
+                <div class="about-item">
+                    <h3>🎯 Purpose</h3>
+                    <p>Designed to help grocery store personnel quickly assess fruit ripeness to reduce waste and optimize inventory.</p>
+                </div>
+                <div class="about-item">
+                    <h3>📊 Technology</h3>
+                    <p>Uses computer vision and deep learning to analyze images and classify fruits into ripeness categories.</p>
+                </div>
+                <div class="about-item">
+                    <h3>📱 Usage</h3>
+                    <p>Upload a fruit image using the interface above, and receive instant classification and inventory recommendations.</p>
+                </div>
+                <div class="about-item">
+                    <h3>🔒 Privacy</h3>
+                    <p>All processing happens directly in your browser. No images are sent to external servers.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>Fruit Ripeness Classification System - Reducing Food Waste Through Technology</p>
+        <p><small>© 2025 - Built with TensorFlow.js</small></p>
     </footer>
 
     <!-- JavaScript Files -->

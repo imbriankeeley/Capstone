@@ -103,11 +103,14 @@ function handleFileUpload(file) {
     }
     
     if (!file.type.match('image.*')) {
-        alert('Please upload an image file');
+        showNotification('Please upload an image file', 'error');
         return;
     }
     
     console.log('File uploaded:', file.name);
+    
+    // Show loading indicator
+    showLoadingIndicator(true);
     
     // Display the uploaded image
     displayUploadedImage(file);
@@ -127,6 +130,7 @@ function displayUploadedImage(file) {
     
     if (!preview) {
         console.error('Image preview element not found');
+        showLoadingIndicator(false);
         return;
     }
     
@@ -136,6 +140,7 @@ function displayUploadedImage(file) {
     // Create image element
     const img = document.createElement('img');
     img.file = file;
+    img.classList.add('preview-image');
     
     // Add to preview
     preview.appendChild(img);
@@ -148,14 +153,18 @@ function displayUploadedImage(file) {
             
             // Once image is loaded, trigger classification
             aImg.onload = function() {
-                // Only classify if model is loaded
-                if (model) {
-                    classifyImage(aImg).catch(err => {
-                        console.error('Classification error:', err);
-                    });
+                // Check if we need to wait for model loading
+                if (window.model) {
+                    processImageClassification(aImg, file);
                 } else {
-                    console.warn('Model not loaded, waiting for model');
-                    // TODO: Implement waiting for model to load
+                    // Initialize classifier if not already done
+                    initializeClassifier().then(() => {
+                        processImageClassification(aImg, file);
+                    }).catch(err => {
+                        console.error('Error initializing classifier:', err);
+                        showNotification('Error loading classification model', 'error');
+                        showLoadingIndicator(false);
+                    });
                 }
             };
         };
@@ -164,4 +173,68 @@ function displayUploadedImage(file) {
     reader.readAsDataURL(file);
 }
 
-// TODO: Add additional upload-related functions as needed
+/**
+ * Process image classification
+ * @param {HTMLImageElement} img - The image element
+ * @param {File} file - The original file for metadata
+ */
+function processImageClassification(img, file) {
+    // Ensure the results section is visible
+    document.getElementById('results-section').classList.remove('hidden');
+    
+    // Classify the image
+    classifyImage(img, file).then(results => {
+        // Hide loading indicator
+        showLoadingIndicator(false);
+    }).catch(err => {
+        console.error('Classification error:', err);
+        showNotification('Error processing image', 'error');
+        showLoadingIndicator(false);
+    });
+}
+
+/**
+ * Show or hide the loading indicator
+ * @param {boolean} show - Whether to show the loading indicator
+ */
+function showLoadingIndicator(show) {
+    const loadingIndicator = document.getElementById('loading-indicator');
+    
+    if (loadingIndicator) {
+        if (show) {
+            loadingIndicator.classList.remove('hidden');
+        } else {
+            loadingIndicator.classList.add('hidden');
+        }
+    }
+}
+
+/**
+ * Show a notification message
+ * @param {string} message - The message to display
+ * @param {string} type - The type of notification (info, success, error)
+ */
+function showNotification(message, type = 'info') {
+    // You can implement a toast notification here
+    // For simplicity, we'll just use console.log
+    console.log(`[${type.toUpperCase()}]`, message);
+    
+    // Create a temporary notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    // Add to the DOM
+    document.body.appendChild(notification);
+    
+    // Remove after a delay
+    setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 500);
+    }, 3000);
+}
+
+// Export functions globally
+window.initializeUploadComponent = initializeUploadComponent;
